@@ -1,0 +1,188 @@
+@import "tailwindcss";
+
+@theme {
+  --color-bg:           #08090c;
+  --color-panel:        #0f1116;
+  --color-panel-2:      #14161f;
+  --color-panel-hover:  #1a1d28;
+  --color-line:         #1f222c;
+  --color-line-strong:  #2a2e3a;
+
+  --color-text-1:       #e6e7ed;
+  --color-text-2:       #9095a3;
+  --color-text-3:       #5b6070;
+  --color-text-mute:    #3d4150;
+
+  --color-accent:       #f5b942;
+  --color-accent-dim:   rgba(245, 185, 66, 0.12);
+
+  --color-good:         #3ed598;
+  --color-good-dim:     rgba(62, 213, 152, 0.12);
+  --color-warn:         #f5b942;
+  --color-warn-dim:     rgba(245, 185, 66, 0.12);
+  --color-danger:       #ff5a4d;
+  --color-danger-dim:   rgba(255, 90, 77, 0.12);
+
+  --font-sans:    'IBM Plex Sans', ui-sans-serif, system-ui, sans-serif;
+  --font-mono:    'IBM Plex Mono', ui-monospace, 'SFMono-Regular', monospace;
+  --font-serif:   'IBM Plex Serif', ui-serif, Georgia, serif;
+}
+
+html, body, #root {
+  height: 100%;
+}
+
+html {
+  background: var(--color-bg);
+  color-scheme: dark;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-feature-settings: 'ss01', 'cv11';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background:
+    radial-gradient(1200px 600px at 80% -10%, rgba(245, 185, 66, 0.05), transparent 60%),
+    radial-gradient(900px 500px at -10% 110%, rgba(62, 213, 152, 0.04), transparent 60%),
+    var(--color-bg);
+  background-attachment: fixed;
+  color: var(--color-text-1);
+  letter-spacing: -0.005em;
+}
+
+/* numeric tabular alignment everywhere a mono class is used */
+.font-mono, .tabular {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0;
+}
+
+/* fine grid texture overlay (subtle) */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.012) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.012) 1px, transparent 1px);
+  background-size: 56px 56px;
+  z-index: 0;
+}
+
+#root {
+  position: relative;
+  z-index: 1;
+}
+
+::selection {
+  background: rgba(245, 185, 66, 0.25);
+  color: var(--color-text-1);
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-line-strong);
+  border-radius: 5px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-text-mute);
+}
+
+/* page-load reveal — used by every top-level dashboard section */
+@keyframes wnr-reveal {
+  0%   { opacity: 0; transform: translateY(12px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+.reveal {
+  opacity: 0;
+  animation: wnr-reveal 0.65s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation-delay: var(--reveal-delay, 0ms);
+}
+
+@keyframes wnr-spin {
+  to { transform: rotate(360deg); }
+}
+.spin {
+  animation: wnr-spin 0.8s linear infinite;
+}
+
+/* ring chart number pop */
+@keyframes wnr-count {
+  0% { transform: scale(0.92); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/* dimension bar fill */
+@keyframes wnr-fill {
+  0% { transform: scaleX(0); }
+  100% { transform: scaleX(1); }
+}
+
+/* hairline divider used between header sections */
+.hairline {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--color-line-strong), transparent);
+}
+
+/* small-caps label utility */
+.kicker {
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  color: var(--color-text-3);
+  font-weight: 500;
+}
+
+/* number style */
+.num {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0;
+}
+
+/* PRINT */
+@media print {
+  @page {
+    size: A4;
+    margin: 14mm;
+  }
+
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    color-adjust: exact !important;
+  }
+
+  html, body {
+    background: var(--color-bg) !important;
+  }
+
+  body::before { display: none; }
+
+  .no-print, button, .print-hide {
+    display: none !important;
+  }
+
+  .print-break-before {
+    page-break-before: always;
+  }
+
+  .print-avoid-break {
+    page-break-inside: avoid;
+  }
+
+  /* expand all sections at print time */
+  .print-expand-all .row-collapsed {
+    display: table-row !important;
+  }
+}
